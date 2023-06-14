@@ -36,7 +36,7 @@ class CmdInit {
     print("Starting....\n");
     print("---- Hello, TDD. Test Driven Development. Fasting. ----\n");
     print("Have a good day. today and time: ${DateTime.now()}\n");
-    print("This github, ");
+    print("This github, https://github.com/infott2t/dartTddEx");
 
   }
 
