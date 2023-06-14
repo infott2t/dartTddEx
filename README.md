@@ -9,7 +9,7 @@ Need Dart sdk. Dart learning, this site is good. [Dart link, https://dart.dev/gu
 
 ### How to learning
 
-/bin/main.dart is main file. This file is run.
+tddex1.dart is main file. This file is run.
 
 So, you can run this file.
 
