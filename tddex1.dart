@@ -24,7 +24,7 @@ class CmdInit {
     inputData();
     startCmdString();
     statusView();
-    cmdView3(cmdList, cmdIndex);
+    cmdView(cmdList, cmdIndex);
 
 
   }
@@ -51,25 +51,6 @@ class CmdInit {
     print("");
   }
 
-  void cmdView() {
-    print("***** Command View *****\n");
-    print("1. Login");
-    print("2. Logout");
-    print("3. User Role");
-    print("4. Service");
-    print("5. Exit");
-    print("");
-  }
-
-  void cmdView2() {
-    print("***** Command View *****\n");
-    print("1. Login");
-    print("2. Logout");
-    print("3. User Role");
-    print("4. Service");
-    print("5. Exit");
-    print("");
-  }
 
 
 
@@ -91,7 +72,7 @@ class CmdInit {
 
   }
 
-  void cmdView3(List<List<String>> cmdList, int cmdIndex) {
+  void cmdView(List<List<String>> cmdList, int cmdIndex) {
     print("***** Command View *****\n");
     List<String> cmdStrSpt = cmdList[cmdIndex][3].split(',');
     for (int i = 0; i < cmdStrSpt.length; i++) {
@@ -99,14 +80,22 @@ class CmdInit {
     }
     print("");
     if(cmdList[cmdIndex][2] == 'NumberQustion') {
-      print("DRIVE a number:");
+      print("INPUT a number:");
       int input = int.parse(stdin.readLineSync()!); // 숫자 입력 받기
-      cmdIndex = input - 1; // 입력한 숫자와 메뉴 인덱스를 맞추기 위해 1을 뺌
-      cmdView3(cmdList, cmdIndex);
+      input = input - 1; // 입력한 숫자와 메뉴 인덱스를 맞추기 위해 1을 뺌
+      print("***** Comment View *****\n");
+      print("Input Number is '${input +1}'. and cmdList[][3], '${cmdList[cmdIndex][3]}'. \n");
+      //cmdList[cmdIndex][3]의 값을 split한다.1
+      List<String> menuStrs = cmdList[cmdIndex][3].split(',');
+      print("So, menu value is '${menuStrs[input]}'. Next make code, //TODO.");
+      //메뉴값을 가져올 수 있으므로, 해당 일을 시켜주면 된다.
+      //TODO next this line~~. 메뉴값을 가져올수 있으므로, if문에 대입해서, cmdList를 진행시켜주면 됨니다.
+
+      //cmdView(cmdList, cmdIndex);
     } else if(cmdList[cmdIndex][2] == 'MoveStringScreen') {
       print("${cmdList[cmdIndex][3]}");
       cmdIndex = cmdList[cmdIndex][4] == '' ? 0 : cmdList[cmdIndex][4] == 'start' ? 0 : 1;
-      cmdView3(cmdList, cmdIndex);
+      //cmdView(cmdList, cmdIndex);
     } else {
       print("Invalid menu option!");
     }
