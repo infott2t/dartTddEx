@@ -22,11 +22,19 @@ class CmdInit {
     bootUpTime = DateTime.now();
     //Need http, save BootupTime.
     inputData();
-    startCmdString();
-    statusView();
-    cmdView(cmdList, cmdIndex);
+
+    //처음에 해야할 일, 반복.
+    boot(cmdIndex);
 
 
+  }
+
+  //처음에 시작해야하는 일들.
+  void boot(int cmdIndex){
+
+    startCmdString();           // 메뉴 상위부분 출력
+    statusView();                // 사용자 상태 값 출력
+    cmdView(cmdList, cmdIndex); // cmdIndex값에 따라, cmdList[cmdIndex][3]. 메뉴를 출력.
   }
 
 
@@ -65,23 +73,41 @@ class CmdInit {
 
   void inputData() {
     cmdList.add(['start',        'start',     'NumberQustion',    '1.Login,2.Logout,3.Service,4.Quit','']);
-    cmdList.add(['start,1.Login','login',     'MoveStringScreen', 'ID,PW','start']);
-    cmdList.add(['start,1.Login_result','login_true','MoveStringScreen', 'Log activated.'                   ,'start']);
-    cmdList.add(['start,1.Login_result','login_false','MoveStringScreen','Need registe[Y/N]'                ,'regist_chk']);
+    cmdList.add(['start,1.Login','login',     'MoveStringScreen', 'MoveScreenLoginTF','start,1.Login_resultTF']);
+    cmdList.add(['start,1.Login_resultTF','login_true','MoveStringScreen', 'Log activated.'                   ,'start']);
+    cmdList.add(['start,1.Login_resultTF','login_false','MoveStringScreen','Need registe[Y/N]'                ,'regist_chk']);
 
 
   }
 
   void cmdView(List<List<String>> cmdList, int cmdIndex) {
     print("***** Command View *****\n");
+
+    // 명령어 메뉴값. split으로 각각 나눔. '1.메뉴이름, 2.메뉴이름,3.메뉴이름'
     List<String> cmdStrSpt = cmdList[cmdIndex][3].split(',');
+
+    // 사용자에게 입력받는 숫자값. cmdList[cmdIndex][2]의 값이 'NumberQustion'일 경우 사용.
+    int input=0;
+
+
+
     for (int i = 0; i < cmdStrSpt.length; i++) {
       print("${cmdStrSpt[i]}");
     }
     print("");
+
+   //cmdList[cmdIndex][2]의 값이 'NumberQustion'일 경우, 숫자값을 입력받는 로직을 실행시킨다.
     if(cmdList[cmdIndex][2] == 'NumberQustion') {
       print("INPUT a number:");
-      int input = int.parse(stdin.readLineSync()!); // 숫자 입력 받기
+
+      try {
+        input = int.parse(stdin.readLineSync()!); // 숫자 입력 받기
+      }catch(e){
+        print(e);
+        print("Error. Back to First Menu.");
+        //input값이 예외값인 경우, 다시 cmdIndex값을 0으로 하여, 메뉴를 처음부터 작동시킨다.
+        boot(0);
+      }
       input = input - 1; // 입력한 숫자와 메뉴 인덱스를 맞추기 위해 1을 뺌
       print("***** Comment View *****\n");
       print("Input Number is '${input +1}'. and cmdList[][3], '${cmdList[cmdIndex][3]}'. \n");
@@ -90,6 +116,15 @@ class CmdInit {
       print("So, menu value is '${menuStrs[input]}'. Next make code, //TODO.");
       //메뉴값을 가져올 수 있으므로, 해당 일을 시켜주면 된다.
       //TODO next this line~~. 메뉴값을 가져올수 있으므로, if문에 대입해서, cmdList를 진행시켜주면 됨니다.
+      //입력받은 input이 명령어 숫자를 넘어섰는지 확인.
+      try{
+
+      }catch(e){
+        print(e);
+        print("Error. Back to First Menu.");
+        //input값이 예외값인 경우, 다시 cmdIndex값을 0으로 하여, 메뉴를 처음부터 작동시킨다.
+        boot(0);
+      }
 
       //cmdView(cmdList, cmdIndex);
     } else if(cmdList[cmdIndex][2] == 'MoveStringScreen') {
