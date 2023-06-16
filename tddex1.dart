@@ -12,7 +12,9 @@ class MenuInit{
   bool loginTF = false;
   String writeID = "";
   String writePW = "";
+  String writeRole = "";
   String userRole="";
+
 
   late DateTime loginTime;
 
@@ -89,6 +91,29 @@ class MenuInit{
           print("FALSE");
           boot(0);
         }
+      } else if (menuList[menuIndex][0] == "start,5.Regist,writingID,writingPassword,writingRole"){
+        //TODO - http, 회원가입 확인하고 값 저장하기.
+        // loginTF = http....
+        // 파일로 저장.
+        bool regist = saveFile(writeID, writePW, writeRole);
+        if(regist){
+          print("TRUE");
+          loginTF = true;
+        }else{
+          print("FALSE");
+          boot(0);
+        }
+        print("---ID, $writeID");
+        String resultMenu = "";
+        if (loginTF) {
+          resultMenu = menuList[menuIndex][0] + ",T";
+          print("TRUE");
+          boot(0);
+        } else {
+          resultMenu = menuList[menuIndex][0] + ",F";
+          print("FALSE");
+          boot(0);
+        }
       }
       //menuList에서 cmdList[menuIndex][0]의 값과 resultMenu값이 일치하는 부분을 찾기.
       int i = 0;
@@ -145,7 +170,24 @@ class MenuInit{
         } else if (menuList[menuIndex][0] == "start,1.Login,F,Y,writingID") {
           writePW = input;
           resultMenu = menuList[menuIndex][0] + ",writingPassword";
+        }else if(menuList[menuIndex][0] == "start,5.Regist"){
+          writeID = input;
+          resultMenu = menuList[menuIndex][0] + ",writingID";
+        }else if(menuList[menuIndex][0] == "start,5.Regist,writingID") {
+          writePW = input;
+          resultMenu = menuList[menuIndex][0] + ",writingPassword";
+        }else if(menuList[menuIndex][0] == "start,5.Regist,writingID,writingPassword") {
+          writeRole= input;
+          if(writeRole == "admin") {
+            resultMenu = menuList[menuIndex][0] + ",writingRole";
+          }else if(writeRole == "user") {
+            resultMenu = menuList[menuIndex][0] + ",writingRole";
+          }else{
+            boot(menuIndex);
+          }
+
         }
+
       }
       //menuList에서 cmdList[menuIndex][0]의 값과 resultMenu값이 일치하는 부분을 찾기.
       int i = 0;
@@ -178,7 +220,7 @@ class MenuInit{
   void initMenuList() {
     menuList.add(['start','1.Login,2.Logout,3.Service,4.Status,5.Regist,6.Exit','NumberQuestion']);
     menuList.add(['start,1.Login','Check login...','chkBool']);
-    menuList.add(['start,1.Login,T','Activated.','start']);
+    menuList.add(['start,1.Login,T','Activated.','InitMenu']);
     menuList.add(['start,1.Login,F','Not Activated. \nLogin?[Y/N]','YNQuestion']);
     menuList.add(['start,1.Login,F,Y','Login..., input ID. ','StringQuestion']);
     menuList.add(['start,1.Login,F,Y,writingID','Login input Password.','StringQuestion']);
@@ -186,5 +228,42 @@ class MenuInit{
     menuList.add(['start,1.Login,F,Y,writingID,writingPassword,chkBool','Check login...','chkBool']);
     menuList.add(['start,1.Login,F,N','No login. ','InitMenu']);
     menuList.add(['start,4.Status','Status...','PrintStatus']);
+    menuList.add(['start,5.Regist','Regist...ID:','StringQuestion']);
+    menuList.add(['start,5.Regist,writingID','Regist...PW:','StringQuestion']);
+    menuList.add(['start,5.Regist,writingID,writingPassword','Regist...Role: admin, user','StringQuestion']);
+    menuList.add(['start,5.Regist,writingID,writingPassword,writingRole','Regist...','chkBool']);
+  }
+
+  bool saveFile(String writeID, String writePW, String writeRole) {
+    bool resultSaveTF = false;
+    //ID와 암호를 파일로 저장.
+    //login.txt파일이 있는지 확인.
+    if (File('login.txt').existsSync()) {
+      print("login.txt file is exist.");
+      //login.txt파일이 있으면, 파일을 읽어서, ID가 있는지 확인.
+      File file = File('login.txt');
+      String fileContent = file.readAsStringSync();
+      List<String> fileContentList = fileContent.split('|');
+      bool existID= false;
+      for (int i = 0; i < fileContentList.length; i++) {
+        List<String> fileContentList2 = fileContentList[i].split(',');
+        if (fileContentList2[0] == writeID) {
+          print("ID is exist.");
+          //ID가 있으므로, resultSaveTF = false;
+          existID = true;
+          break;
+        }
+      }
+      if(!existID){
+        //ID가 없으므로, resultSaveTF = true;
+        print("ID is not exist.");
+        resultSaveTF = true;
+
+        //ID와 암호를 파일에 저장.
+        file.writeAsStringSync('$writeID,$writePW,$writeRole|', mode: FileMode.append);
+        userRole = writeRole;
+      }
+    }
+    return resultSaveTF;
   }
 }
