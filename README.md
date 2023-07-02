@@ -11,7 +11,7 @@ Need Dart sdk. Dart learning, this site is good. [Dart link, https://dart.dev/gu
 
 ### How to learning
 
-tddex1.dart is main file. This file is run.
+tddex1.dart is main file. This file is run. and main.dart, too.
 
 So, you can run this file.
 
